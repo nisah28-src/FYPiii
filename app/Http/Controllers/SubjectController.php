@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Subject;
+use Illuminate\Http\Request;
+use App\Imports\SubjectsImport;
+use App\Enums\SubjectStatus;
+use Illuminate\Validation\Rules\Enum;
+use Maatwebsite\Excel\Facades\Excel;
+
+class SubjectController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+       
+
+        $subjects = Subject::orderBy('subject_code')
+        ->get()
+        ->groupBy(function ($item) {
+            return substr($item -> subject_code,0,4);
+        } );
+
+        return view('subject.index', compact('subjects'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $subjects = Subject::all();
+        return view('subject.create', compact('subjects'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'subject_name' => ['required','string','max:255'],
+            'subject_code' => ['required','string','max:255'],
+            'credit_hours' => ['required','integer'],
+            'category_type' => ['required',new Enum(SubjectStatus::class)],
+        ]);
+
+        $type= $request->enum('category_type',SubjectStatus::class);
+
+
+        $subject = Subject::create($request->all());
+
+        if ($request->subject_prerequisite){
+            $subject->prerequisites()->sync($request->subject_prerequisite);
+        }
+        
+        return redirect()->route('subject.index')->with('success','Subject added successfully!');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Subject $subject)
+    {
+       
+        return view('subject.show', compact('subject'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Subject $subject)
+    {
+        return view('subject.edit');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Subject $subject)
+    {
+        
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(rc $rc)
+    {
+        //
+    }
+
+    public function import(Request $request){
+        
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv'
+        ]);
+
+        Excel::import(new SubjectsImport, request()->file('file'));
+
+        return back()->with('success','Subjects imported successfully.');
+    }
+}
