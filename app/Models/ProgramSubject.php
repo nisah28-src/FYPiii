@@ -10,7 +10,13 @@ class ProgramSubject extends Model
      'program_structure_id','semester_number','subject_id','is_compulsory',
     ];
 
-    public function program_structures() {
-       return $this->BelongsTo(ProgramStructure::class); 
+    public function programStructure() {
+       return $this->belongsTo(ProgramStructure::class, 'program_structure_id'); 
     }
+
+
+public function subject() {
+    return $this->belongsTo(Subject::class, 'subject_id', 'id');
+}
+
 }

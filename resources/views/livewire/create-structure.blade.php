@@ -76,7 +76,7 @@
     <h3 class="text-lg font-bold">Choose Subjects</h3>
     <p class="py-4">Subject selected will be listed in the table on the page</p>
         <!-- if there is a button in form, it will close the modal -->
-
+    <input type="text" wire:model.live="searchSubject" placeholder="Search subject..." class="input input-bordered w-full mb-2">
         @foreach($subjects as $subject)
         <ul>
             <li>

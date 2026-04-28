@@ -17,7 +17,7 @@ class HOPcontroller extends Controller
     {
         $totalPending = ProgramStructure::where('status','draft')->count();
         $totalApproved = ProgramStructure::where('status','approved')->count();
-        $drafts= ProgramStructure::all();
+        $drafts= ProgramStructure::where('status','draft')->get();
         $role = auth()->user()->roles()->value('role');
 
 
@@ -47,12 +47,12 @@ class HOPcontroller extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function review($id){
+        return redirect()->route('review.show', $id);
+    }
     public function show(rc $rc)
     {
-        //
+        
     }
 
     /**

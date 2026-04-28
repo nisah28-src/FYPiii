@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-
+use App\Enums\RoleEnum;
 class RegisteredUserController extends Controller
 {
     /**
@@ -56,22 +56,22 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        $role= $user->roles()->first()->role;
+        $role= \App\Enums\RoleEnum::from($request->role_id);
 
-        if ($role === 'staff'){
+        if ($role === RoleEnum::staff){
         return redirect()-> route('staff.dashboard');
        }
 
-       if ($role === 'HOP'){
+       if ($role === RoleEnum::HOP){
         return redirect()->route('hop.dashboard');
        }
 
-       if ($role === 'HOD'){
+       if ($role === RoleEnum::HOD){
         return redirect()->route('hod.dashboard');
        }
 
 
-       return redirect()->route('auth.register');
+       return redirect()->route('/dashboard');
 
     }
 

@@ -26,6 +26,7 @@ class CreateStructure extends Component
             ])->layout('layouts.app'); 
     }
 
+
         public function openModal($index) {
     $this->isOpen = true;
     $this->semIndex = $index;

@@ -10,6 +10,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\StructureController;
 use App\Livewire\CreateStructure;
 use App\Livewire\ReviewStructure;
+use App\Livewire\ViewStructure;
 
 
 Route::get('/', function () {
@@ -17,16 +18,17 @@ Route::get('/', function () {
 });
 
 
-Route::middleware('auth', 'role:staff')->group(function () {
-    Route::get('/staff/dashboard',[StaffController::class,'index'])->name('staff.dashboard');
+Route::middleware('auth', 'role:staff')->prefix('staff')->group(function () {
+    Route::get('/dashboard',[StaffController::class,'index'])->name('staff.dashboard');
 });
 
-Route::middleware('auth', 'role:HOP')->group(function () {
-    Route::get('/hop/dashboard',[HOPController::class,'index'])->name('hop.dashboard');
+
+Route::middleware('auth', 'role:HOP')->prefix('hop')->group(function () {
+    Route::get('/dashboard',[HOPController::class,'index'])->name('hop.dashboard');
 });
 
-Route::middleware('auth', 'role:HOD')->group(function () {
-    Route::get('/hod/dashboard',[HODController::class,'index'])->name('hod.dashboard');
+Route::middleware('auth', 'role:HOD')->prefix('hod')->group(function () {
+    Route::get('/dashboard',[HODController::class,'index'])->name('hod.dashboard');
 });
 
 
@@ -46,4 +48,7 @@ Route::post('/subjects/import', [SubjectController::class, 'import'])
 require __DIR__.'/auth.php';
 
 Route::get('/create-structure', CreateStructure::class);
-Route::get('/review-structure/{id}', ReviewStructure::class)->name('review.show');
+Route::get('/review-structure/', ReviewStructure::class);
+
+Route::get('/view-structure/{id}', ViewStructure::class)->name('program.view');
+Route::get('view-structure/{id}/duplicate', [ViewStructure::class, 'duplicate'])->name('structures.duplicate');

@@ -24,15 +24,29 @@
 </div>
 </div>
 
+ <div class="overflow-x-auto rounded-box border border-slate-700 bg-slate-800/40">
         <table class="table text-center w-full">
             <thead class="bg-slate-900/50 border-b border-slate-700">
                 <tr> 
-                    <th class="py-4"> Name</th>
-                    <th class="text-center"> Created At</th>
-                    <th class="text-right"> Status</th>
+                    <th>Name</th>
+                    <th class="text-center">Created At</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-    </thead>
+</thead>
+<tbody> @foreach ($drafts as $structure)
+                <tr>
+                    <td>{{ $structure->program_structure_name }}</td>
+                    <td>{{ $structure->created_at }}</td>
+                    <td>{{ $structure->status }}</td>
+                    <td> <a href="{{ route('program.view',$structure->id) }}"><button class="btn btn-primary"> View or Update </button></a>
+                    <button> <a href ="{{ route('structures.duplicate',$structure->id)}}"> Duplicate</a>
+</button></td>
+                   
+</tr>
+</tbody> @endforeach
 </table>
+</div>
 
 @if($drafts->count())
     @else

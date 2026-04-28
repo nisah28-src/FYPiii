@@ -10,7 +10,7 @@ class ProgramStructure extends Model
      'program_structure_name','program_id', 'version', 'status','created_by'
     ];
 
-    public function program_subjects() {
-        return $this->BelongsTo(ProgramSubject::class);
+    public function programSubjects() {
+        return $this->hasMany(ProgramSubject::class, 'program_structure_id');
     }
 }

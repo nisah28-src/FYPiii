@@ -21,9 +21,9 @@
             <x-input-label for="role" :value="__('Role')"/>
                 <select name="role_id" id="role_id" class="form-control">
                     <option value="">--Select Role--</option>
-                    @foreach ($roles as $data)
-                    <option value="{{$data->id}}">
-                        {{$data->role}}
+                    @foreach (App\Enums\RoleEnum::cases() as $role)
+                    <option value="{{ $role->value }}">
+                        {{$role->label()}}
                     </option>
                     @endforeach
                 </select> 

@@ -36,8 +36,13 @@ class HODController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Dsplay the specified resource.
      */
+
+    public function review($id){
+        return redirect()->route('review.show', $id);
+    }
+    
     public function show(rc $rc)
     {
         //

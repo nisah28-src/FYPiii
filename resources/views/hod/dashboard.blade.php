@@ -37,10 +37,7 @@
                     <td>{{ $structure->program_structure_name }}</td>
                     <td>{{ $structure->created_at }}</td>
                     <td>{{ $structure->status }}</td>
-                    <td> <a href="{{ route('review.show', $structure->Prog_Struct_ID) }}" 
-   class="btn btn-primary btn-sm">
-    Review
-</a></td>
+                   
 </tr>
 </tbody> @endforeach
 </table>

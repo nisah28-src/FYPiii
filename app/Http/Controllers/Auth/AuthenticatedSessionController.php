@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\User;
+use App\Enums\RoleEnum;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -33,15 +34,15 @@ class AuthenticatedSessionController extends Controller
 
 
 
-       if ($user === 'staff'){
+       if ($user === RoleEnum::staff->value){
         return redirect()-> route('staff.dashboard');
        }
 
-       if ($user === 'HOP'){
+       if ($user === RoleEnum::HOP->value){
         return redirect()->route('hop.dashboard');
        }
 
-        if ($user === 'HOP'){
+        if ($user === RoleEnum::HOD->value){
         return redirect()->route('hod.dashboard');
        }
 
