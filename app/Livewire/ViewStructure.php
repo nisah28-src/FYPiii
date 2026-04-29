@@ -116,7 +116,7 @@ public function duplicate()
     session()->flash('message', 'Structure successfully duplicated as V2!');
 
     // Redirect ke page edit structure yang baru tu
-    return redirect()->route('program.view', $newStructure->id);
+    return redirect()->route('structure.duplicate', $newStructure->id);
 }
 
     public function render()

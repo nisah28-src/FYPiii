@@ -1,6 +1,6 @@
 <x-app-layout>
 
-<h2 class="text-3xl p-4 font-bold"> Welcome, User!</h2>
+<h2 class="text-3xl p-4 font-bold"> Welcome, Staff</h2>
 
     <div class="max-w-5xl mx-auto"> <div class="p-6">
     <div class="grid grid-cols-2 gap-2">

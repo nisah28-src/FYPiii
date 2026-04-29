@@ -51,4 +51,4 @@ Route::get('/create-structure', CreateStructure::class);
 Route::get('/review-structure/', ReviewStructure::class);
 
 Route::get('/view-structure/{id}', ViewStructure::class)->name('program.view');
-Route::get('view-structure/{id}/duplicate', [ViewStructure::class, 'duplicate'])->name('structures.duplicate');
+Route::get('view-structure/{id}/duplicate', [App\Livewire\ViewStructure::class, 'duplicate'])->name('structure.duplicate');

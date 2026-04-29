@@ -1,6 +1,6 @@
 <x-app-layout>
 
-<h2 class="text-3xl p-4 font-bold"> Welcome, {{ $role }}</h2>
+<h2 class="text-3xl p-4 font-bold"> Welcome, Head Of Program</h2>
 
 <h2 class="text-xl p-2 font-bold"> Your Program:  </h2>
 
@@ -39,8 +39,8 @@
                     <td>{{ $structure->program_structure_name }}</td>
                     <td>{{ $structure->created_at }}</td>
                     <td>{{ $structure->status }}</td>
-                    <td> <a href="{{ route('program.view',$structure->id) }}"><button class="btn btn-primary"> View or Update </button></a>
-                    <button> <a href ="{{ route('structures.duplicate',$structure->id)}}"> Duplicate</a>
+                    <td> <a href="{{ route('program.view',$structure->id) }}"><button class="btn btn-primary"> Update </button></a>
+                    <button> <a href ="{{ route('structure.duplicate',$structure->id)}}"> Duplicate</a>
 </button></td>
                    
 </tr>

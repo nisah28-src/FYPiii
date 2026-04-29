@@ -34,15 +34,15 @@ class AuthenticatedSessionController extends Controller
 
 
 
-       if ($user === RoleEnum::staff->value){
+       if ($user === 'staff'){
         return redirect()-> route('staff.dashboard');
        }
 
-       if ($user === RoleEnum::HOP->value){
+       if ($user === 'HOP'){
         return redirect()->route('hop.dashboard');
        }
 
-        if ($user === RoleEnum::HOD->value){
+        if ($user === 'HOD'){
         return redirect()->route('hod.dashboard');
        }
 
