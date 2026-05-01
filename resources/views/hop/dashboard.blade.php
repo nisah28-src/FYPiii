@@ -4,6 +4,12 @@
 
 <h2 class="text-xl p-2 font-bold"> Your Program:  </h2>
 
+ @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
 <div class="max-w-5xl mx-auto"> <div class="p-6">
     <div class="grid grid-cols-2 gap-2">
     <div class="flex items-center justify-between">

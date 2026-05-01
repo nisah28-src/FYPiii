@@ -47,9 +47,7 @@ class HOPcontroller extends Controller
         //
     }
 
-    public function review($id){
-        return redirect()->route('review.show', $id);
-    }
+    
     public function show(rc $rc)
     {
         
@@ -78,4 +76,34 @@ class HOPcontroller extends Controller
     {
         //
     }
+
+
+    public function duplicate($id)
+{
+    // 1. Cari structure asal
+    $original = ProgramStructure::with('programSubjects')->findOrFail($id);
+
+    // 2. Replicate structure tu (copy properties dia)
+    $newStructure = $original->replicate();
+
+    $name = $original->program_structure_name;
+
+    $count = ProgramStructure::where('program_structure_name', 'LIKE', $name . '%')->count();
+    
+    // 3. Ubah nama sikit supaya user tak pening
+    $newStructure->program_structure_name = $name . '(V' . ($count + 1). ')';
+    $newStructure->status = 'draft'; // Reset status jadi draft
+    $newStructure->save();
+
+    // 4. Copy semua subjek-subjek dia
+    foreach ($original->programSubjects as $subject) {
+        $newSubject = $subject->replicate();
+        $newSubject->program_structure_id = $newStructure->id; // Link kan ke structure baru
+        $newSubject->save();
+    }
+
+    // Redirect ke dashboard with new doc on the list
+    return redirect()->route('hop.dashboard')->with('success', 'Structure successfully duplicated');
+}
+
 }

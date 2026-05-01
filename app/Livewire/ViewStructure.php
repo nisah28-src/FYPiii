@@ -93,10 +93,10 @@ class ViewStructure extends Component
 }
 
 
-public function duplicate()
+public function duplicate($id)
 {
     // 1. Cari structure asal
-    $original = ProgramStructure::with('programSubjects')->findOrFail($this->structureId);
+    $original = ProgramStructure::with('programSubjects')->findOrFail($id);
 
     // 2. Replicate structure tu (copy properties dia)
     $newStructure = $original->replicate();
