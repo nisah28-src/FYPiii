@@ -8,6 +8,7 @@ use App\Http\Controllers\HOPController;
 use App\Http\Controllers\HODController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\StructureController;
+use App\Http\Controllers\PDFController;
 use App\Livewire\CreateStructure;
 use App\Livewire\ReviewStructure;
 use App\Livewire\ViewStructure;
@@ -47,8 +48,9 @@ Route::post('/subjects/import', [SubjectController::class, 'import'])
 
 require __DIR__.'/auth.php';
 
-Route::get('/create-structure', CreateStructure::class);
-Route::get('/review-structure/', ReviewStructure::class);
+Route::get('/create-structure', CreateStructure::class)->name('create.structure');
+Route::get('/review-structure/{id}', ReviewStructure::class)->name('review.structure');
 
 Route::get('/view-structure/{id}', ViewStructure::class)->name('program.view');
 Route::get('duplicate-structure/{id}', [HOPController::class, 'duplicate'])->name('structure.duplicate');
+Route::get('/download-structure/{id}', [PDFController::class, 'generatePDF'])->name('structure.pdf');

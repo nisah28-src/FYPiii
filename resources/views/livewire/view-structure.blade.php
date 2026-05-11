@@ -1,10 +1,29 @@
 <div>
     {{-- It is quality rather than quantity that matters. - Lucius Annaeus Seneca --}}
 
+
+     @if (session()->has('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
+    </div>
+@endif
+
+    @if ($errors->any())
+        <div class="alert alert-error">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    
     <h1>Update Structure</h1>
     <h2>Name: {{$structure->program_structure_name }}</h2>
 <div>
     <button class="btn btn-success btn-lg m-6" wire:click="finalize"> Finalize & Back to Dashboard</button>
+    <button class="btn btn-success btn-lg m-6" wire:click="submit"> Submit </button>
 </div>
     <button wire:click="addSem" class="btn btn-outline-success w-100">
     + Add New Semester

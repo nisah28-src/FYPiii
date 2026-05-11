@@ -13,7 +13,7 @@ class HODController extends Controller
      */
     public function index()
     {
-        $toReview = ProgramStructure::where('status','draft')->get();
+        $toReview = ProgramStructure::where('status','pending')->get();
         $role = auth()->user()->roles()->value('role');
 
         return view('hod.dashboard', compact ('toReview','role'));

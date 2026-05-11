@@ -10,6 +10,16 @@
     </div>
 @endif
 
+@if ($errors->any())
+    <div class="alert alert-error">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <div class="flex justify-between items-center">
         <div>
             <h1 class="text-2xl">Create Structure</h1>
@@ -19,7 +29,8 @@
             <h3>Structure Name:</h3>  <input type="text" class="input input-bordered" placeholder="Enter Structure Name.." wire:model="title">
         </div>
 
-        <button class="btn btn-success btn-lg m-6" wire:click="store"> Submit </button>
+        <button class="btn btn-success btn-lg m-6" wire:click="store"> Save </button>
+        <button class="btn btn-success btn-lg m-6" wire:click="submit"> Submit </button>
     </div>
     <div class="m-4">
     <button class="btn btn-sm btn-primary" wire:click="addSemester()">+ Add Semester</button>
@@ -29,7 +40,7 @@
         @foreach($structure as $index => $semester)
         <div class="card bg-slate-200  border border-base-300 m-4">
             <div class="card-body m-2 shadow-md">
-            <h2>Semester {{$index + 1 }}</h2>
+            <h2>Semester {{ $loop->iteration }}</h2>
 
             <button class="btn btn-primary" wire:click="openModal({{ $index }})"> Add Subjects</button>
             <div class="overflow-x-auto">
@@ -43,11 +54,11 @@
                     <tbody>
                     @forelse($semester['subs'] as $sub)
                     <tr>
-                    <td> {{ $sub->subject_name }} </td>
-                    <td> {{ $sub->subject_code }} </td>
-                    <td> {{ $sub->credit_hours }} </td>
+                    <td> {{ $sub['subject_name'] }} </td>
+                    <td> {{ $sub['subject_code'] }} </td>
+                    <td> {{ $sub['credit_hours'] ?? 0 }} </td>
                     <td> 
-                        <button class="btn btn-error btn-sm" wire:click="removeFromTable({{ $index }},{{ $sub->id }})">Remove</button></td></tr>
+                        <button class="btn btn-error btn-sm" wire:click="removeFromTable({{ $index }},{{ $sub['id'] }})">Remove</button></td></tr>
                     @empty
                     <tr>
                         <td>No subject Added yet</td>
@@ -60,7 +71,7 @@
                 <div class="text-right text-primary font-semibold">
                     Total Credit:
                     {{ collect($semester['subs'])->sum(function($sub) {
-                    return $sub->credit_hours?? 0;})
+                    return $sub['credit_hours'] ?? 0;})
                     }}
                     </div>
             </div>

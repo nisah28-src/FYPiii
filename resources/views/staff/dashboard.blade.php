@@ -29,8 +29,19 @@
                     <th class="py-4"> Name</th>
                     <th class="text-center"> Created At</th>
                     <th class="text-right"> Status</th>
+                    <th class="text-right"> Action</th>
                 </tr>
 </thead>
+<tbody> @foreach ($approved as $structure)
+                <tr>
+                    <td>{{ $structure->program_structure_name }}</td>
+                    <td>{{ $structure->created_at }}</td>
+                    <td class="text-right"> {{ $structure->status }}</td>
+                    <td> <a href="{{ route('structure.pdf', $structure->id) }}" class="btn btn-primary">
+    Download PDF
+</a></td>
+</tr>
+</tbody> @endforeach
 </table>
 </div>
 </x-app-layout>

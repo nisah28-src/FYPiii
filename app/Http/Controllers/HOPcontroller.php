@@ -15,9 +15,10 @@ class HOPcontroller extends Controller
      */
     public function index()
     {
-        $totalPending = ProgramStructure::where('status','draft')->count();
+        $totalPending = ProgramStructure::where('status','pending')->count();
         $totalApproved = ProgramStructure::where('status','approved')->count();
-        $drafts= ProgramStructure::where('status','draft')->get();
+        $totalDraft = ProgramStructure::where('status','draft')->count();
+        $drafts= ProgramStructure::orderBy('status')->get()->groupBy('status');
         $role = auth()->user()->roles()->value('role');
 
 
@@ -27,6 +28,7 @@ class HOPcontroller extends Controller
             'drafts',
             'totalPending', 
             'totalApproved',
+            'totalDraft',
             'role',
             ));
     }

@@ -11,12 +11,15 @@
     @endif
 
 <div class="max-w-5xl mx-auto"> <div class="p-6">
-    <div class="grid grid-cols-2 gap-2">
+    <div class="grid grid-cols-3 gap-2">
     <div class="flex items-center justify-between">
-        <x-card title="Draft Submitted" count="{{ $totalPending }}" class=" text-base-content"/>
+        <x-card title="Draft Created" count="{{ $totalDraft }}" class=" text-base-content"/>
     </div>   
     <div class="flex items-center justify-between">        
         <x-card title="Approved Structure" count="{{ $totalApproved }}" class=" text-base-content"/>
+    </div>
+    <div class="flex items-center justify-between">        
+        <x-card title="Submitted for Approval" count="{{ $totalPending }}" class=" text-base-content"/>
     </div>
 </div>
 </div>
@@ -30,6 +33,8 @@
 </div>
 </div>
 
+@foreach ($drafts as $group => $structure)
+<h2 class="font-bold p-6">{{ $group }}</h2>
  <div class="overflow-x-auto rounded-box border border-slate-700 bg-slate-800/40">
         <table class="table text-center w-full">
             <thead class="bg-slate-900/50 border-b border-slate-700">
@@ -40,19 +45,21 @@
                     <th>Action</th>
                 </tr>
 </thead>
-<tbody> @foreach ($drafts as $structure)
+<tbody> 
+    @foreach ($structure as $sub)
                 <tr>
-                    <td>{{ $structure->program_structure_name }}</td>
-                    <td>{{ $structure->created_at }}</td>
-                    <td>{{ $structure->status }}</td>
-                    <td> <a href="{{ route('program.view',$structure->id) }}"><button class="btn btn-primary"> Update </button></a>
-                    <button> <a href ="{{ route('structure.duplicate',$structure->id)}}"> Duplicate</a>
+                    <td>{{ $sub->program_structure_name }}</td>
+                    <td>{{ $sub->created_at }}</td>
+                    <td>{{ $sub->status }}</td>
+                    <td> <a href="{{ route('program.view',$sub->id) }}"><button class="btn btn-primary"> Update </button></a>
+                    <button> <a href ="{{ route('structure.duplicate',$sub->id)}}"> Duplicate</a>
 </button></td>
                    
 </tr>
 </tbody> @endforeach
 </table>
 </div>
+@endforeach
 
 @if($drafts->count())
     @else
