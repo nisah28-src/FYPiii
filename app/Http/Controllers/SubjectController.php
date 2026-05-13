@@ -72,9 +72,12 @@ class SubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Subject $subject)
+    public function edit($id)
     {
-        return view('subject.edit');
+        $subject = Subject::findOrFail($id);
+        $subjects = Subject::where('id', '!=', $id)->get();
+        
+        return view('subject.edit', compact('subject', 'subjects'));
     }
 
     /**
@@ -83,6 +86,23 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject)
     {
         
+        $request->validate([
+            'subject_name' => ['required','string','max:255'],
+            'subject_code' => ['required','string','max:255'],
+            'credit_hours' => ['required','integer'],
+            'category_type' => ['required',new Enum(SubjectStatus::class)],
+        ]);
+
+        $type= $request->enum('category_type',SubjectStatus::class);
+
+
+        $subject->update($request->all());
+
+        if ($request->subject_prerequisite){
+            $subject->prerequisites()->sync($request->subject_prerequisite);
+        }
+        
+        return redirect()->route('subject.index')->with('success','Subject updated successfully!');
     }
 
     /**

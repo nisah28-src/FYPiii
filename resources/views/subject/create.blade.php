@@ -14,7 +14,10 @@
     <form action="{{ route('subject.store') }}" method="POST"> 
 @csrf 
 
-<div class="mt-4">
+<div class="flex justify-center mt-6">
+<div class="card w-full sm:w-96 bg-base-100 shadow-2xl border border-base-300 overflow-hidden">
+    <div class="card-body p-10">
+    <div class="mt-4">
             <x-input-label for="subject_name" :value="__('Subject Name')" />
             <x-text-input id="subject_name" class="block mt-1 w-full" type="text" name="subject_name" :value="old('subject_name')" />
             <x-input-error :messages="$errors->get('subject_name')" class="mt-2" />
@@ -41,33 +44,47 @@
             {{ $type->label() }} 
         </option>
     @endforeach
-</select>
+    </select>
 
         <div class="mt-4">
             <x-input-label for="subject_prerequisite" :value="__('Pre-Requisite')" />
                 <div class="max-h-[150px] w-full border overflow-y-auto">
             
-                    @foreach ($subjects as $subject)
+                    
                      <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="subject_prerequisite[]" value="{{ $subject->id }}" class="checkbox checkbox-sm">
+                        <select class="form-control select2-search" name="subject_prerequisite[]" multiple="multiple">
+                        @foreach ($subjects as $subject)    
+                        <option value="{{ $subject->id }}" 
+                            @selected(in_array($subject->id, old('subject_prerequisite', [])))>
+                                {{ $subject->subject_code }} - 
                         {{ $subject->subject_name }}
-                    </label>  
-                  
-                    @endforeach
+                            </option>
+                            @endforeach
+                        </select>
+                    </label>
                 
                 </div>   
+        </div>
+    </div>
+    </div>        
 </div>
 </div>
-</div>
-
-
-          
+        <div class="flex justify-center mt-6">
 
     <x-primary-button class="ms-4">
                 {{ __('Add') }}
             </x-primary-button>
         </div>
     </form>
-
+<script>
+$(document).ready(function() {
+    // Aktifkan fungsi carian pada dropdown
+    $('.select2-search').select2({
+        placeholder: "Taip kod atau nama subjek...",
+        allowClear: true,
+        width: '100%' // Supaya ikut lebar container
+    });
+});
+</script>
 
 </x-app-layout>

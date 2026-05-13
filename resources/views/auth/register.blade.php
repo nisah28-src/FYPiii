@@ -19,10 +19,10 @@
         <!--Role-->
          <div class="mt-4">
             <x-input-label for="role" :value="__('Role')"/>
-                <select name="role_id" id="role_id" class="form-control">
+                <select name="role_id" id="role_id" class="form-control" onchange="chooseProgram()">
                     <option value="">--Select Role--</option>
                     @foreach (App\Enums\RoleEnum::cases() as $role)
-                    <option value="{{ $role->value }}">
+                    <option value="{{ $role->value }}" {{ old('role_id') == $role->value ? 'selected' : '' }}>
                         {{$role->label()}}
                     </option>
                     @endforeach
@@ -32,12 +32,12 @@
 </div>
 
 <!--Programs if Role is HOP-->
-         <div class="mt-4">
-            <x-input-label for="program" :value="__('Programs')"/>
+         <div class="mt-4" id='program-wrapper' style="display:none;">
+            <x-input-label for="program" :value="__('Assigned Program')"/>
                 <select name="program_id"  id="program_id" class="form-control">
                     <option value="">--Select Program--</option>
                     @foreach ($programs as $data)
-                    <option value="{{$data->id}}">
+                    <option value="{{$data->id}}" {{ old('program_id') == $data->id ? 'selected' : '' }}>
                         {{$data->prog_name}}
                     </option>
                     @endforeach
@@ -79,4 +79,26 @@
             </x-primary-button>
         </div>
     </form>
+
+
+    <script> 
+    function chooseProgram() {
+        const roleSelect = document.getElementById('role_id').value;
+        const programWrapper = document.getElementById('program-wrapper');
+        const programSelect = document.getElementById('program_id');
+
+        const hopValue = "{{ App\Enums\RoleEnum::HOP->value }}";
+
+            if (roleSelect == hopValue) {
+                programWrapper.style.display = 'block';
+            } else {
+                programWrapper.style.display = 'none';
+                document.getElementById('program_id').value = "";
+            }       
+}
+document.addEventListener('DOMContentLoaded', function() {
+        chooseProgram();
+    });
+    </script>
+
 </x-guest-layout>

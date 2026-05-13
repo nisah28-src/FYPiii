@@ -35,11 +35,11 @@ class RegisteredUserController extends Controller
     {
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => ['required', 'string', 'max:255','unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'regex:/^[a-zA-Z0-9.+]+@(?:[a-zA-Z0-9]+\.)?uniten\.edu\.my$/i', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::min(8)->letters()->numbers()],
             'role_id' => ['required'],
-            'program_id' => ['nullable'],
+            'program_id' => ['required_if:role,hop','nullable','exists:programs,id'],
         ]);
 
         $roleId = $request->role_id;

@@ -10,6 +10,6 @@
 
 </div>
 
-<button class="btn btn-accent p-2 mt-6">Edit</button>
+<a href="{{ route('subject.edit', $subject->id) }}" class="btn btn-accent p-2 mt-6">Edit</a>
 
 </x-app-layout>
