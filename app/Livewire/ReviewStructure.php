@@ -17,9 +17,11 @@ class ReviewStructure extends Component
     public function render()
     {
         // Kita load data di sini supaya sentiasa fresh
-        ProgramStructure::where('id', $this->structureId)->first()->load('programSubjects.subject');
+        $structure = ProgramStructure::with('programSubjects.subject')
+                ->find($this->structureId);
+
         return view('livewire.review-structure', [
-        'structure' => $structureId = ProgramStructure::where('id', $this->structureId)->first(),
+        'structure' => $structure,
         'subjects' => Subject::all(),
         ]);
     }
@@ -53,6 +55,7 @@ class ReviewStructure extends Component
         });
     
         session()->flash('message', 'Program structure approved successfully!');
+            return redirect()->route('hop.dashboard');
     }
 
     public function reject(){
@@ -74,10 +77,11 @@ class ReviewStructure extends Component
                 'approval_request_id' => $approvalRequest->id,
                 'action' => 'rejected',
                 'remarks' => $this->remarks,
-                'created_at' => auth()->id(),
+                'action_by' => auth()->id(),
             ]);
         });
 
         session()->flash('message', 'Program structure rejected.');
+        return redirect()->route('hop.dashboard');
     }
 }

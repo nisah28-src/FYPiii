@@ -30,23 +30,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-       $user=auth()->user()->roles()->first()->role;
+       $user=auth()->user()->roles()->first()->id;
 
+       $role= RoleEnum::from($user);
 
+       return match ($role) {
+        RoleEnum::HOP => redirect()->route('hop.dashboard'),
+        RoleEnum::HOD => redirect()->route('hod.dashboard'),
+        RoleEnum::staff => redirect()->route('staff.dashboard'),
+        default => redirect('/'),
+       };
 
-       if ($user === 'staff'){
-        return redirect()-> route('staff.dashboard');
-       }
-
-       if ($user === 'HOP'){
-        return redirect()->route('hop.dashboard');
-       }
-
-        if ($user === 'HOD'){
-        return redirect()->route('hod.dashboard');
-       }
-
-       return redirect()->route('login');
     }
 
     /**

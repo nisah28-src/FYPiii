@@ -34,6 +34,10 @@
     <div class="card bg-slate-200  border border-base-300 m-4">
         <div class="card-body m-2 shadow-md">
         <h4> Semester {{ $sem }}</h4>
+        <div class="inline-flex gap-2 justify-center">
+        <button wire:click="moveUp({{ $sem }})" class="btn btn-sm btn-secondary mb-2">Move Up</button>
+        <button wire:click="moveDown({{ $sem }})" class="btn btn-sm btn-secondary mb-2">Move Down</button>
+</div>
         <button class="btn btn-primary" wire:click="OpenModal({{ $sem }})"> Add Subjects</button>
      <div class="overflow-x-auto">
                 <table class="table table-zebra w-full text-sm">

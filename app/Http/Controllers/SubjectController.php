@@ -17,6 +17,9 @@ class SubjectController extends Controller
     public function index()
     {
        
+        $role = auth()->user()->roles()->value('role');
+
+       
 
         $subjects = Subject::orderBy('subject_code')
         ->get()
@@ -24,9 +27,17 @@ class SubjectController extends Controller
             return substr($item -> subject_code,0,4);
         } );
 
-        return view('subject.index', compact('subjects'));
+        return view('subject.index', compact('subjects','role'));
     }
 
+    public function toggleStatus($id)
+    {
+       $subject = \App\Models\Subject::findOrFail($id);
+       $subject->is_active = !$subject->is_active;
+        $subject->save();
+
+        return redirect()->route('subject.index')->with('success', 'Subject status updated successfully!');
+    }  
     /**
      * Show the form for creating a new resource.
      */
@@ -76,7 +87,7 @@ class SubjectController extends Controller
     {
         $subject = Subject::findOrFail($id);
         $subjects = Subject::where('id', '!=', $id)->get();
-        
+            
         return view('subject.edit', compact('subject', 'subjects'));
     }
 
@@ -108,9 +119,10 @@ class SubjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(rc $rc)
+    public function destroy(Subject $subject)
     {
-        //
+        $subject->delete();
+        return redirect()->route('subject.index')->with('success','Subject deleted successfully!');
     }
 
     public function import(Request $request){

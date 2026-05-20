@@ -17,8 +17,10 @@ class CreateStructure extends Component
     public $semIndex;
     public $title = '';
     public $remarks = '';
+    public $studenttype = false; // New property to track if it's for international students
     public array $selectedSubjects = [];
     public $isOpen = false;
+
 
     public function mount(){
        $this->structure = session('draft_structure', []); 
@@ -28,7 +30,7 @@ class CreateStructure extends Component
     public function render()
     {
         return view('livewire.create-structure', [ 
-            'subjects' => Subject::all(),
+            'subjects' => Subject::where('is_active', true)->get(),
             ])->layout('layouts.app'); 
     }
 
@@ -108,9 +110,16 @@ class CreateStructure extends Component
        'structure' => ['required', 'array'],
          ]);
 
-            DB::transaction( function () {
-                $struct = ProgramStructure::create([
-            'program_structure_name' => $this->title,
+         $finalTitle = $this->title;
+         if ($this->studenttype) {
+            $finalTitle .= '(International)';
+            }else {
+            $finalTitle .='(Local)';
+            }
+
+           $struct = DB::transaction( function () use ($finalTitle) {
+            $newStruct = ProgramStructure::create([
+            'program_structure_name' => $finalTitle,
             'program_id' => 1,
             'created_by' => auth()->id(),
         ]);
@@ -119,22 +128,40 @@ class CreateStructure extends Component
             $semesterNum = $index + 1;
             foreach ($semester['subs'] as $subject){
             ProgramSubject::create([
-            'program_structure_id'=> $struct->id,
+            'program_structure_id'=> $newStruct->id,
             'semester_number' => $semesterNum,
             'subject_id' => $subject['id'],
+            'created_by' => auth()->id(),
             ]); 
             }
-        }
+        } return $newStruct;
             });
-        
-
 
         $this->structureId = $struct->id;
 
         session()->flash('message','Structure successfully saved');
 
     }
-        
+      
+    public function moveUp($index) {
+        if ($index == 0) return; // Tak boleh move up kalau dah kat atas
+
+        $temp = $this->structure[$index - 1];
+        $this->structure[$index - 1] = $this->structure[$index];
+        $this->structure[$index] = $temp;
+
+        $this->persistToSession();
+    }
+
+    public function moveDown($index) {
+        if ($index == count($this->structure) - 1) return; // Tak boleh move down kalau dah kat bawah
+
+        $temp = $this->structure[$index + 1];
+        $this->structure[$index + 1] = $this->structure[$index];
+        $this->structure[$index] = $temp;
+
+        $this->persistToSession();
+    }
 
     public function submit() {
 

@@ -40,11 +40,11 @@
                 </div>
 
                 <div class="flex flex-col gap-3 mt-4">
-                    <button wire:click="approve" class="btn btn-success text-white">
-                        ✅ Approve Structure
+                    <button wire:click="approve" class="btn btn-success">
+                     Approve Structure
                     </button>
-                    <button wire:click="reject" class="btn btn-error text-white">
-                        ❌ Reject Structure
+                    <button wire:click="reject" class="btn btn-error">
+                    Reject Structure
                     </button>
                 </div>
             </div>

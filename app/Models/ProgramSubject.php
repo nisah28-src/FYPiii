@@ -15,7 +15,7 @@ class ProgramSubject extends Model
     }
 
 
-public function subject() {
+    public function subject() {
     return $this->belongsTo(Subject::class, 'subject_id', 'id');
 }
 

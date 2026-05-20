@@ -17,6 +17,7 @@ class ViewStructure extends Component
 
     
     public $structureId;
+    public $title;
     public $isOpen = false;
     public $semIndex;
     public array $selectedSubjects=[];
@@ -26,6 +27,8 @@ class ViewStructure extends Component
 {
     
       $this->structureId = $id;
+        $structure = ProgramStructure::findOrFail($id);
+        $this->title = $structure->program_structure_name;
         
 }
 
@@ -74,7 +77,9 @@ class ViewStructure extends Component
 {
     // Contoh: Kemaskini status kalau ada column status
     $struct = ProgramStructure::find($this->structureId);
-    $struct->update(['status' => 'draft']);
+    
+    $struct->update(['program_structure_name' => $this->title,
+    'status' => '']);
 
     session()->flash('message', 'Structure finalized successfully!');
     return redirect()->route('hop.dashboard');
@@ -101,14 +106,12 @@ class ViewStructure extends Component
         session()->flash('error', 'Sila tekan "Save" dahulu sebelum Submit.');
         return;
     }
-
-
-
         DB::transaction(function() {
         $programStructure = ProgramStructure::findOrFail($this->structureId);
-        $programStructure->update([ 'status' => 'Pending' ]);
+        $programStructure->update([ 'program_structure_name' => $this->title,
+        'status' => 'Pending' ]);
 
-        ApprovalRequest::create([
+        ApprovalRequest::updateOrCreate([
             'program_structure_id' => $this->structureId,
             'status' => 'Pending',
             'requested_by' => auth()->id(),
@@ -120,6 +123,53 @@ class ViewStructure extends Component
         session()->forget(['draft_structure', 'draft_title']);
         session()->flash('message', "Successfully submitted for review");
     }
+
+    public function moveUp($currentSem) {
+        if ($currentSem <= 1) return; // Tak boleh move up kalau dah kat atas (sem 1)
+
+        $targetSem = $currentSem - 1;
+
+    $this->swapSemesters($currentSem, $targetSem);
+    }
+
+
+    public function moveDown($currentSem) {
+        $maxSem = ProgramSubject::where('program_structure_id', $this->structureId)->max('semester_number');
+    
+    if ($currentSem >= $maxSem) return; // Dah paling bawah
+
+    $targetSem = $currentSem + 1;
+
+    $this->swapSemesters($currentSem, $targetSem);
+    }
+
+    private function swapSemesters($currentSem, $targetSem)
+{
+    DB::transaction(function () use ($currentSem, $targetSem) {
+        // 1. Tukar currentSem jadi temporary (contoh: 99) supaya tak bertembung (constraint)
+        ProgramSubject::where('program_structure_id', $this->structureId)
+            ->where('semester_number', $currentSem)
+            ->update(['semester_number' => 99]);
+
+        // 2. Tukar targetSem jadi currentSem
+        ProgramSubject::where('program_structure_id', $this->structureId)
+            ->where('semester_number', $targetSem)
+            ->update(['semester_number' => $currentSem]);
+
+        // 3. Tukar temporary (99) tadi jadi targetSem
+        ProgramSubject::where('program_structure_id', $this->structureId)
+            ->where('semester_number', 99)
+            ->update(['semester_number' => $targetSem]);
+            
+        // 4. Update juga dalam extraSemesters kalau ada (supaya UI konsisten)
+        // Kita cuma swap value dalam array kalau wujud
+        if (in_array($currentSem, $this->extraSemesters) || in_array($targetSem, $this->extraSemesters)) {
+            // Logic ni optional kalau kau guna database-driven view sepenuhnya
+            $this->extraSemesters = []; 
+        }
+    });
+    session()->flash('message', "Semester $currentSem dan $targetSem telah ditukar kedudukan.");
+}
 
     public function render()
     {

@@ -27,10 +27,13 @@
             <h3>Program: </h3>
             <h3>Status: Draft </h3>
             <h3>Structure Name:</h3>  <input type="text" class="input input-bordered" placeholder="Enter Structure Name.." wire:model="title">
+           <h3> Made for International Student </h3> <input type="checkbox" class="checkbox checkbox-primary ml-4" wire:model="studenttype">
         </div>
 
         <button class="btn btn-success btn-lg m-6" wire:click="store"> Save </button>
+        @if ($structureId)
         <button class="btn btn-success btn-lg m-6" wire:click="submit"> Submit </button>
+        @endif
     </div>
     <div class="m-4">
     <button class="btn btn-sm btn-primary" wire:click="addSemester()">+ Add Semester</button>
@@ -43,6 +46,10 @@
             <h2>Semester {{ $loop->iteration }}</h2>
 
             <button class="btn btn-primary" wire:click="openModal({{ $index }})"> Add Subjects</button>
+            <div class="inline-flex gap-2 justify-center">
+                <button wire:click="moveUp({{ $index }})" class="btn btn-sm btn-secondary mb-2">Move Up</button>
+                <button wire:click="moveDown({{ $index }})" class="btn btn-sm btn-secondary mb-2">Move Down</button>
+            </div>
             <div class="overflow-x-auto">
                 <table class="table table-zebra w-full text-sm">
                     <thead><tr>

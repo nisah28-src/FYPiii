@@ -11,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('programs', function (Blueprint $table) {
+        $table->id();
+        $table->string('program_name'); // Contoh: Bachelor of Computer Science 
+        $table->boolean('is_active')->default(true); // Status program buka/tutup
+        $table->timestamps();
+    });
     }
 
     /**

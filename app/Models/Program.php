@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Program extends Model
 {
      protected $fillable = [
-        'prog_code','prog_name'
+        'program_name', 'is_active',
     ];
 
     

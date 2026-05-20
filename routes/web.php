@@ -9,6 +9,7 @@ use App\Http\Controllers\HODController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\StructureController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\ProgramController;
 use App\Livewire\CreateStructure;
 use App\Livewire\ReviewStructure;
 use App\Livewire\ViewStructure;
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::resource('programs', ProgramController::class);
+
+Route::post('/subjects/{id}/toggle-status', [SubjectController::class, 'toggleStatus'])->name('subjects.toggle-status');
 Route::resource('subject', SubjectController::class);
 
 Route::resource('structure', StructureController::class);
@@ -53,4 +57,5 @@ Route::get('/review-structure/{id}', ReviewStructure::class)->name('review.struc
 
 Route::get('/view-structure/{id}', ViewStructure::class)->name('program.view');
 Route::get('duplicate-structure/{id}', [HOPController::class, 'duplicate'])->name('structure.duplicate');
+Route::delete('/hop/destroy/{id}', [HOPcontroller::class, 'destroy'])->name('hop.destroy');
 Route::get('/download-structure/{id}', [PDFController::class, 'generatePDF'])->name('structure.pdf');
