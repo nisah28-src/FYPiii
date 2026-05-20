@@ -31,17 +31,7 @@ class HOPController extends Controller
             ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
    
-    /**
-     * Update the specified resource in storage.
-  
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $structure = ProgramStructure::findOrFail($id);
@@ -86,7 +76,8 @@ $newTitle = $base . " (V{$version})";
     
     // 3. Ubah nama sikit supaya user tak pening
     $newStructure->program_structure_name = $newTitle;
-    $newStructure->status = 'draft'; // Reset status jadi draft
+    $newStructure->status = 'draft';
+    $newStructure->version = $version;
     $newStructure->save();
 
     // 4. Copy semua subjek-subjek dia
@@ -95,9 +86,7 @@ $newTitle = $base . " (V{$version})";
         $newSubject->program_structure_id = $newStructure->id; // Link kan ke structure baru
         $newSubject->save();
     }
-
-    // Redirect ke dashboard with new doc on the list
-    return redirect()->route('hop.dashboard')->with('success', 'Structure successfully duplicated');
+        return redirect()->route('hop.dashboard')->with('success', 'Structure successfully duplicated');
 });
 }
 }
