@@ -20,17 +20,28 @@ class CreateStructure extends Component
     public $studenttype = false; // New property to track if it's for international students
     public array $selectedSubjects = [];
     public $isOpen = false;
+    public $searchSubject='';
 
 
     public function mount(){
        $this->structure = session('draft_structure', []); 
        $this->title = session('draft_title', '');
+       $this->studenttype = session('draft_studenttype', false);
     }
 
     public function render()
     {
+    $subjectsQuery = Subject::where('is_active', true);
+
+    if (!empty($this->searchSubject)) {
+        $subjectsQuery->where(function($q) {
+            $q->where('subject_code', 'like', '%' . $this->searchSubject . '%')
+              ->orWhere('subject_name', 'like', '%' . $this->searchSubject . '%');
+        });
+    }
+
         return view('livewire.create-structure', [ 
-            'subjects' => Subject::where('is_active', true)->get(),
+            'subjects' => $subjectsQuery->get(),
             ])->layout('layouts.app'); 
     }
 
@@ -139,10 +150,19 @@ class CreateStructure extends Component
 
         $this->structureId = $struct->id;
 
+        session()->forget(['draft_structure', 'draft_title', 'draft_studenttype']);
+
         session()->flash('message','Structure successfully saved');
+        return redirect()->route('hop.dashboard');
+        
 
     }
       
+    public function back() {
+        session()->forget(['draft_structure', 'draft_title', 'draft_studenttype']);
+        return redirect()->route('hop.dashboard');
+    }
+    
     public function moveUp($index) {
         if ($index == 0) return; // Tak boleh move up kalau dah kat atas
 

@@ -79,7 +79,27 @@ class ViewStructure extends Component
     $struct = ProgramStructure::find($this->structureId);
     
     $struct->update(['program_structure_name' => $this->title,
-    'status' => '']);
+    'status' => 'draft']);
+
+     $programSubjects = ProgramSubject::where('program_structure_id', $this->structureId)->get();
+
+            foreach ($programSubjects as $ps) {
+
+            $masterSubject = Subject::find($ps->subject_id);
+
+            if ($masterSubject) {
+                $ps->update([
+                    'subject_name_snapshot' => $masterSubject->subject_name,
+                    'credit_hours_snapshot' => $masterSubject->credit_hours,
+                ]);
+            } else {
+                $ps->update([
+                    'subject_code' => 'Subjek Tiada (Data Master Padam)',
+                    'subject_name' => 'Subjek Tiada (Data Master Padam)',
+                    'credit_hours' => 0,
+                ]);
+            }
+            }
 
     session()->flash('message', 'Structure finalized successfully!');
     return redirect()->route('hop.dashboard');
@@ -108,7 +128,8 @@ class ViewStructure extends Component
     }
         DB::transaction(function() {
         $programStructure = ProgramStructure::findOrFail($this->structureId);
-        $programStructure->update([ 'program_structure_name' => $this->title,
+        $programStructure->update([ 
+        'program_structure_name' => $this->title,
         'status' => 'Pending' ]);
 
         ApprovalRequest::updateOrCreate([
@@ -117,8 +138,27 @@ class ViewStructure extends Component
             'requested_by' => auth()->id(),
         ]);
 
-        });
+         $programSubjects = ProgramSubject::where('program_structure_id', $this->structureId)->get();
         
+            foreach ($programSubjects as $ps) {
+                
+            $masterSubject = Subject::find($ps->subject_id);
+
+
+            if ($masterSubject) {
+              $prereqCodes = $masterSubject->prerequisites()->pluck('subject_code')->unique()->values()->toArray(); 
+              
+             
+
+            \DB::table('program_subjects')->where('id', $ps->id)
+            ->update([
+                'subject_name_snapshot' => $masterSubject->subject_name,
+                'subject_code_snapshot' => $masterSubject->subject_code,
+                'credit_hours_snapshot' => $masterSubject->credit_hours,
+                'prerequisites' => json_encode($prereqCodes),
+            ]); }
+                    
+            } });
         
         session()->forget(['draft_structure', 'draft_title']);
         session()->flash('message', "Successfully submitted for review");
@@ -160,6 +200,7 @@ class ViewStructure extends Component
         ProgramSubject::where('program_structure_id', $this->structureId)
             ->where('semester_number', 99)
             ->update(['semester_number' => $targetSem]);
+
             
         // 4. Update juga dalam extraSemesters kalau ada (supaya UI konsisten)
         // Kita cuma swap value dalam array kalau wujud

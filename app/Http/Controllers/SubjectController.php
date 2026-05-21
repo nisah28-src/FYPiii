@@ -14,14 +14,17 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
        
         $role = auth()->user()->roles()->value('role');
+        $search = $request->input('search');
 
-       
-
-        $subjects = Subject::orderBy('subject_code')
+        $subjects = Subject::query()
+        ->when($search, function($query) use ($search) {
+            $query->where('subject_code', 'like', "%{$search}%")
+                  ->orWhere('subject_name', 'like', "%{$search}%");
+        })
         ->get()
         ->groupBy(function ($item) {
             return substr($item -> subject_code,0,4);
@@ -96,7 +99,8 @@ class SubjectController extends Controller
      */
     public function update(Request $request, Subject $subject)
     {
-        
+     
+
         $request->validate([
             'subject_name' => ['required','string','max:255'],
             'subject_code' => ['required','string','max:255'],
@@ -107,11 +111,17 @@ class SubjectController extends Controller
         $type= $request->enum('category_type',SubjectStatus::class);
 
 
-        $subject->update($request->all());
+        $prereqIds = $request->input('subject_prerequisite', []);
+        $cleanIds = array_values(array_unique(array_filter((array)$prereqIds)));
 
-        if ($request->subject_prerequisite){
-            $subject->prerequisites()->sync($request->subject_prerequisite);
-        }
+        $subject->update([
+        'subject_name' => $request->subject_name,
+        'subject_code' => $request->subject_code,
+        'credit_hours' => $request->credit_hours,
+        'category_type' => $request->category_type,
+        'prerequisites' => json_encode($cleanIds),
+    ]);
+            $subject->prerequisites()->sync($cleanIds);
         
         return redirect()->route('subject.index')->with('success','Subject updated successfully!');
     }

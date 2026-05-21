@@ -15,18 +15,30 @@
         </div>
     @endif
 
+    <form action="{{ route('subject.index') }}" method="GET" class="mb-6 px-4">
+            <input type="text" 
+                   name="search" 
+                   value="{{ request('search') }}" 
+                   placeholder="Search by name or code..." 
+                   class="input input-bordered w-full">
+            <button type="submit" class="hidden"></button>
+        </form>
+
 
 
         @if($subjects->count())
 
+        
+
+
     <div class="card bg-slate-200  border border-base-300 m-4">
         <div class="card-body m-2 shadow-md">
-        @foreach($subjects as $prefix => $group)
+            @foreach($subjects as $prefix => $group)
 
             <h3 class="font-bold p-6">{{ $prefix }}</h3>
             <div class="overflow-x-auto w-full rounded-box">
              <table class=" table table-zebra w-full text-sm">
-                <thead class="bg-slate-900/50 border-b border-slate-700">
+                <thead class="bg-blue-900 text-white">
                 <tr> 
                     <th>Subject Name</th>
                     <th> Subject Code</th>

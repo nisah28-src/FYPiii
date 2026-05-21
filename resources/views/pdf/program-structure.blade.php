@@ -90,9 +90,9 @@
                         </td>
                     @endif
 
-                    <td style="font-weight: bold; text-align: center;">{{ $pSub->subject->subject_code }}</td>
-                    <td>{{ $pSub->subject->subject_name }}</td>
-                    <td style="text-align: center;">{{ $pSub->subject->credit_hours }}</td>
+                    <td style="font-weight: bold; text-align: center;">{{ $pSub->subject_code_snapshot }}</td>
+                    <td>{{ $pSub->subject_name_snapshot }}</td>
+                    <td style="text-align: center;">{{ $pSub->credit_hours_snapshot }}</td>
                     <td>
                         @forelse($pSub->subject->prerequisites as $pre)
                             <span class="badge-pre">{{ $pre->subject_name }}</span>

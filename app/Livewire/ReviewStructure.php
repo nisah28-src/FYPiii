@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class ReviewStructure extends Component
 {
    public $structureId;
-   public $remarks = '';
+   public $remarks = ''; 
 
     public function render()
     {
@@ -53,6 +53,7 @@ class ReviewStructure extends Component
         });
     
         session()->flash('message', 'Program structure approved successfully!');
+        return redirect()->route('hod.dashboard');
     }
 
     public function reject(){
@@ -74,10 +75,11 @@ class ReviewStructure extends Component
                 'approval_request_id' => $approvalRequest->id,
                 'action' => 'rejected',
                 'remarks' => $this->remarks,
-                'created_at' => auth()->id(),
+                'action_by' => auth()->id(),
             ]);
         });
 
         session()->flash('message', 'Program structure rejected.');
+        return redirect()->route('hod.dashboard');
     }
 }

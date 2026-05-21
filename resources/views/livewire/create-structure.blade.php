@@ -20,21 +20,37 @@
     </div>
 @endif
 
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl">Create Structure</h1>
+     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start gap-6">
+        <div class="space-y-4 w-full">
+            <h1 class="text-2xl font-bold text-slate-800">Create Structure</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Structure Name</label>
+                    <input type="text" class="input input-bordered w-full mt-1" placeholder="e.g., Semester Plan 2026" wire:model="title">
+                </div>
+                <div class="flex items-end">
+                    <label class="flex items-center gap-2 cursor-pointer p-3 border rounded-lg hover:bg-slate-50">
+                        <input type="checkbox" class="checkbox checkbox-primary" wire:model="studenttype">
+                        <span class="text-sm font-medium">Made for International</span>
+                    </label>
+                </div>
+            </div>
+            <div class="text-sm text-slate-500">
 
-            <h3>Program: </h3>
-            <h3>Status: Draft </h3>
-            <h3>Structure Name:</h3>  <input type="text" class="input input-bordered" placeholder="Enter Structure Name.." wire:model="title">
-           <h3> Made for International Student </h3> <input type="checkbox" class="checkbox checkbox-primary ml-4" wire:model="studenttype">
+                <span class="font-bold text-amber-600">Status:</span> Draft
+            </div>
         </div>
 
-        <button class="btn btn-success btn-lg m-6" wire:click="store"> Save </button>
-        @if ($structureId)
-        <button class="btn btn-success btn-lg m-6" wire:click="submit"> Submit </button>
-        @endif
+
+        <div class="flex gap-2 shrink-0">
+            <button class="btn btn-outline" wire:click="store">Save Draft</button> 
+            <button class="btn btn-accent" wire:click="back">Back to Dashboard</button>
+            @if ($structureId)
+                <button class="btn btn-primary" wire:click="submit">Submit for Approval</button>
+            @endif
+        </div>
     </div>
+
     <div class="m-4">
     <button class="btn btn-sm btn-primary" wire:click="addSemester()">+ Add Semester</button>
     </div>
@@ -94,14 +110,27 @@
     <h3 class="text-lg font-bold">Choose Subjects</h3>
     <p class="py-4">Subject selected will be listed in the table on the page</p>
         <!-- if there is a button in form, it will close the modal -->
-    <input type="text" wire:model.live="searchSubject" placeholder="Search subject..." class="input input-bordered w-full mb-2">
-        @foreach($subjects as $subject)
-        <ul>
-            <li>
-            <input type="checkbox" value="{{ $subject->id }}" wire:model="selectedSubjects"> {{ $subject -> subject_name }}
-            </li>
-        </ul>
-        @endforeach
+    <input type="text" 
+       wire:model.live.debounce.300ms="searchSubject" 
+       placeholder="Search subject..." 
+       class="input input-bordered w-full mb-2">
+
+<ul class="max-h-[300px] overflow-y-auto border p-2">
+    @foreach($subjects as $subject)
+        <li class="flex items-center gap-2 p-1 hover:bg-gray-100">
+            <input type="checkbox" 
+                   value="{{ $subject->id }}" 
+                   wire:model="selectedSubjects" 
+                   class="checkbox checkbox-sm"> 
+            
+            <span> {{ $subject->subject_name }}</span>
+        </li>
+    @endforeach
+    
+    @if($subjects->isEmpty())
+        <li class="p-2 text-gray-500">No Subject Found</li>
+    @endif
+</ul>
         <button class="btn" wire:click="addSelectedSubjects">Add</button>
         <button class="btn" wire:click="closeModal">Close</button>
   </div>

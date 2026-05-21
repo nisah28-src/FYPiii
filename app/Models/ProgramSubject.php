@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProgramSubject extends Model
 {
     protected $fillable = [
-     'program_structure_id','semester_number','subject_id','is_compulsory',
+     'program_structure_id','semester_number','subject_id','is_compulsory','subject_name_snapshot','credit_hours_snapshot','subject_code_snapshot','prerequisites'
     ];
 
     public function programStructure() {
@@ -18,5 +18,9 @@ class ProgramSubject extends Model
     public function subject() {
     return $this->belongsTo(Subject::class, 'subject_id', 'id');
 }
+
+    protected $casts = [
+        'prerequisites' => 'array',
+    ];
 
 }

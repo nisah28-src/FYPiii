@@ -13,4 +13,9 @@ class ProgramStructure extends Model
     public function programSubjects() {
         return $this->hasMany(ProgramSubject::class, 'program_structure_id');
     }
+
+    public function scopeMine($query)
+{
+    return $query->where('created_by', auth()->id());
+}
 }

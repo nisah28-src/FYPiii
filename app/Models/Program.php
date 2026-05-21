@@ -10,5 +10,8 @@ class Program extends Model
         'program_name', 'is_active',
     ];
 
-    
+    public function hop()
+{
+    return $this->belongsTo(User::class, 'hop_id');
+}
 }

@@ -19,6 +19,7 @@ class Subject extends Model
     {
         return [
             'category_type' => SubjectStatus::class,
+            
         ];
     }
 

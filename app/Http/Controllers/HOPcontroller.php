@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProgramStructure;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 
@@ -11,14 +12,15 @@ class HOPController extends Controller
 {
      public function index()
     {
-        $totalPending = ProgramStructure::where('status','pending')->count();
-        $totalApproved = ProgramStructure::where('status','approved')->count();
-        $totalDraft = ProgramStructure::where('status','draft')->count();
 
-        $drafts= ProgramStructure::orderBy('status')->get()->groupBy('status');
+        $userId = auth()->id();
+        $totalPending = ProgramStructure::where('status','pending')->where('created_by', $userId)->count();
+        $totalApproved = ProgramStructure::where('status','approved')->where('created_by', $userId)->count();
+        $totalDraft = ProgramStructure::where('status','draft')->where('created_by', $userId)->count();
 
-        $role = auth()->user()->roles()->value('role');
+        $drafts= ProgramStructure::where('created_by', $userId)->orderBy('status')->get()->groupBy('status');
 
+        $role = auth()->user()->load('roles');
 
 
 
@@ -28,7 +30,9 @@ class HOPController extends Controller
             'totalApproved',
             'totalDraft',
             'role',
+            
             ));
+
     }
 
    

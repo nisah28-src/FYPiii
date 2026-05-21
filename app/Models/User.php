@@ -27,6 +27,18 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles','user_id','role_id')->withPivot('program_id');
     }
 
+    public function getProgramNameAttribute()
+{
+   $role = $this->roles()->wherePivotNotNull('program_id')->first();
+    
+    if ($role) {
+        $program = \App\Models\Program::find($role->pivot->program_id);
+        return $program->program_name ?? 'Tiada Program';
+    }
+
+    return 'Tiada Program';
+}
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -36,6 +48,11 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function program()
+{
+    return $this->belongsTo(\App\Models\Program::class, 'program_id');
+}
 
     /**
      * Get the attributes that should be cast.

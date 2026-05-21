@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        
                     
                 </div>
 
@@ -36,30 +36,20 @@
     @endif
                     
                 @if(auth()->user()->roles->contains('role', 'HOP'))
-                    <x-nav-link>
+                    <x-nav-link :href="route('create.structure')">
                         {{ __('Create Program') }}
                     </x-nav-link>
                     @endif
+                    @endauth
                 
-                @if(auth()->user()->roles->contains('role', 'staff'))
-                    <x-nav-link>
-                        {{ __('Generate') }}
-                    </x-nav-link>
-                @endif
-                
-                @if(auth()->user()->roles->contains('role', 'HOD'))
-                    <x-nav-link>
-                        {{ __('Review') }}
-                    </x-nav-link>
-                @endif
-                @endauth
+            
 
                     <x-nav-link :href="route('subject.index')" :active="request()->routeIs('subject.*')">
                         {{ __('Subjects') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('structure.index')">
-                        {{ __('Structures') }}
+                    <x-nav-link :href="route('programs.index')" :active="request()->routeIs('program.*')">
+                        {{ __('Programs') }}
                     </x-nav-link>
 </div>
 </div>

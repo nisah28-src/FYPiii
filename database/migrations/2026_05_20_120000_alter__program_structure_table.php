@@ -11,7 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('program_subjects', function (Blueprint $table) {
+            $table->string('subject_code_snapshot')->nullable()->after('subject_name_snapshot');
+            $table->text('prerequisites')->nullable()->after('credit_hours_snapshot');
+        });
     }
 
     /**
@@ -19,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+         Schema::table('program_subjects', function (Blueprint $table) {
+            $table->dropColumn('subject_code_snapshot');
+            $table->dropColumn('prerequisites');
+         });
     }
 };

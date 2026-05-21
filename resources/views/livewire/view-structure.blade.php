@@ -19,12 +19,19 @@
     @endif
 
     
-    <h1>Update Structure</h1>
-    <h2>Name: {{$structure->program_structure_name }}</h2>
-<div>
-    <button class="btn btn-success btn-lg m-6" wire:click="finalize"> Finalize & Back to Dashboard</button>
-    <button class="btn btn-success btn-lg m-6" wire:click="submit"> Submit </button>
-</div>
+    <div class="p-6 max-w-5xl mx-auto space-y-6">
+    {{-- Header Sticky - Melekat kat atas --}}
+    <div class="sticky top-0 z-20 bg-slate-50/95 backdrop-blur-sm p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-800">Update Structure</h1>
+            <p class="text-lg text-slate-500 font-medium">Name: <span class="text-blue-600">{{ $structure->program_structure_name }}</span></p>
+        </div>
+
+        <div class="flex gap-2">
+            <button class="btn btn-outline btn-sm" wire:click="finalize">Finalize & Back</button>
+            <button class="btn btn-primary btn-sm" wire:click="submit">Submit</button>
+        </div>
+    </div>
     <button wire:click="addSem" class="btn btn-outline-success w-100">
     + Add New Semester
 </button>
@@ -35,8 +42,6 @@
         <div class="card-body m-2 shadow-md">
         <h4> Semester {{ $sem }}</h4>
         <div class="inline-flex gap-2 justify-center">
-        <button wire:click="moveUp({{ $sem }})" class="btn btn-sm btn-secondary mb-2">Move Up</button>
-        <button wire:click="moveDown({{ $sem }})" class="btn btn-sm btn-secondary mb-2">Move Down</button>
 </div>
         <button class="btn btn-primary" wire:click="OpenModal({{ $sem }})"> Add Subjects</button>
      <div class="overflow-x-auto">
@@ -45,7 +50,9 @@
                     <th>Name</th>
                     <th>Code</th>
                     <th>Credit</th>
+                    <th>Prerequisites</th>
                     <th> Action</th>
+
                     </tr></thead>
                     <tbody>
                     @forelse($subs as $sub)
@@ -53,6 +60,17 @@
                     <td> {{ $sub->subject_name }} </td>
                     <td> {{ $sub->subject_code }} </td>
                     <td> {{ $sub->credit_hours }} </td>
+                    <td>
+                    @if (!empty($sub->prerequisites))
+                    <ul>
+                    @foreach ($sub->prerequisites as $prereq)
+                    <li>{{ $prereq->subject_code }}</li>
+                    @endforeach
+                    </ul>
+                    @else
+                    None
+                    @endif
+                    </td>
                     <td> 
                         <button class="btn btn-error btn-sm" wire:click="removeFromTable({{ $sub->id }}, {{ $sem }})">Remove</button></td></tr>
                     @empty

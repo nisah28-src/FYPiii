@@ -49,21 +49,20 @@
         <div class="mt-4">
             <x-input-label for="subject_prerequisite" :value="__('Pre-Requisite')" />
                 <div class="max-h-[150px] w-full border overflow-y-auto">
-            
                     
-                     <label class="flex items-center gap-2 cursor-pointer">
+                     <div class="w-full">
                         <select class="form-control select2-search" name="subject_prerequisite[]" multiple="multiple">
                         @foreach ($subjects as $sub)  
                         @if ($sub->id != $subject->id)  
-                        <option value="{{ $sub->id }}" 
-                            @selected(in_array($sub->id, old('subject_prerequisite', $subject->prerequisites->pluck('id')->toArray() ?? [])))>
-                                {{ $sub->subject_code }} - 
-                        {{ $sub->subject_name }}
+                       <option value="{{ $sub->id }}" 
+                        {{-- Logik @selected yang lebih kemas --}}
+                        {{ in_array($sub->id, old('subject_prerequisite', $subject->prerequisites->pluck('id')->toArray())) ? 'selected' : '' }}>
+                        {{ $sub->subject_code }} - {{ $sub->subject_name }}
                             </option>
                             @endif
                             @endforeach
                         </select>
-                    </label>
+                    </div>
                 
                 </div>   
         </div>
@@ -78,14 +77,29 @@
             </x-primary-button>
         </div>
     </form>
-<script>
+
+    <script>
 $(document).ready(function() {
-    // Aktifkan fungsi carian pada dropdown
-    $('.select2-search').select2({
-        placeholder: "Taip kod atau nama subjek...",
-        allowClear: true,
-        width: '100%' // Supaya ikut lebar container
+    function initSelect2() {
+        // Destroy dulu kalau dah ada, baru initialize
+        if ($('.select2-search').hasClass('select2-hidden-accessible')) {
+            $('.select2-search').select2('destroy');
+        }
+        
+        $('.select2-search').select2({
+            placeholder: "Taip kod atau nama subjek...",
+            allowClear: true,
+            width: '100%'
+        });
+
+        $('form').on('submit', function() {
+    // Apabila form submit, pastikan select2 update elemen asal
+   return true;
+       
     });
+    }
+
+    initSelect2();
 });
 </script>
 
