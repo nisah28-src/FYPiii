@@ -22,15 +22,20 @@ Route::get('/', function () {
 
 Route::middleware('auth', 'role:staff')->prefix('staff')->group(function () {
     Route::get('/dashboard',[StaffController::class,'index'])->name('staff.dashboard');
+    Route::get('/download-structure/{id}', [PDFController::class, 'generatePDF'])->name('structure.pdf');
 });
 
 
 Route::middleware('auth', 'role:HOP')->prefix('hop')->group(function () {
     Route::get('/dashboard',[HOPController::class,'index'])->name('hop.dashboard');
+    Route::get('/create-structure', CreateStructure::class)->name('create.structure');
+    Route::get('duplicate-structure/{id}', [HOPController::class, 'duplicate'])->name('structure.duplicate');
+Route::delete('/hop/destroy/{id}', [HOPcontroller::class, 'destroy'])->name('hop.destroy');
 });
 
 Route::middleware('auth', 'role:HOD')->prefix('hod')->group(function () {
     Route::get('/dashboard',[HODController::class,'index'])->name('hod.dashboard');
+    Route::get('/review-structure/{id}', ReviewStructure::class)->name('review.structure');
 });
 
 
@@ -52,10 +57,8 @@ Route::post('/subjects/import', [SubjectController::class, 'import'])
 
 require __DIR__.'/auth.php';
 
-Route::get('/create-structure', CreateStructure::class)->name('create.structure');
+
 Route::get('/review-structure/{id}', ReviewStructure::class)->name('review.structure');
 
 Route::get('/view-structure/{id}', ViewStructure::class)->name('program.view');
-Route::get('duplicate-structure/{id}', [HOPController::class, 'duplicate'])->name('structure.duplicate');
-Route::delete('/hop/destroy/{id}', [HOPcontroller::class, 'destroy'])->name('hop.destroy');
-Route::get('/download-structure/{id}', [PDFController::class, 'generatePDF'])->name('structure.pdf');
+

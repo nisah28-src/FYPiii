@@ -162,6 +162,7 @@ class ViewStructure extends Component
         
         session()->forget(['draft_structure', 'draft_title']);
         session()->flash('message', "Successfully submitted for review");
+        return redirect()->route('hop.dashboard')-> with('message', "Successfully submitted for review");
     }
 
     public function moveUp($currentSem) {

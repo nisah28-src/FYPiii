@@ -123,9 +123,9 @@ class CreateStructure extends Component
 
          $finalTitle = $this->title;
          if ($this->studenttype) {
-            $finalTitle .= '(International)';
+            $finalTitle .= ' _(International)';
             }else {
-            $finalTitle .='(Local)';
+            $finalTitle .=' _(Local)';
             }
 
            $struct = DB::transaction( function () use ($finalTitle) {
@@ -160,7 +160,7 @@ class CreateStructure extends Component
       
     public function back() {
         session()->forget(['draft_structure', 'draft_title', 'draft_studenttype']);
-        return redirect()->route('hop.dashboard');
+        return redirect()->route('hop.dashboard') -> with('message', 'Draft discarded');
     }
     
     public function moveUp($index) {

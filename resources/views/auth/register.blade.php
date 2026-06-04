@@ -32,12 +32,12 @@
 </div>
 
 <!--Programs if Role is HOP-->
-         <div class="mt-4" id='program-wrapper' style="display:none;">
-            <x-input-label for="program" :value="__('Assigned Program')"/>
-                <select name="program_id"  id="program_id" class="form-control">
-                    <option value="">--Select Program--</option>
+         <div class="mt-4" id='program-wrapper' style="display:none;" class="text-black">
+            <x-input-label for="program" :value="__('Assigned Program')" class="text-black"/>
+                <select class="text-blackpacity-100" name="program_id"  id="program_id" class="form-control">
+                    <option class="text-black" value="">--Select Program--</option>
                     @foreach ($programs as $data)
-                    <option value="{{$data->id}}" {{ old('program_id') == $data->id ? 'selected' : '' }}>
+                    <option class="text-black" value="{{$data->id}}" {{ old('program_id') == $data->id ? 'selected' : '' }}>
                         {{$data->prog_name}}
                     </option>
                     @endforeach

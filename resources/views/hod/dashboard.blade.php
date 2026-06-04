@@ -41,7 +41,7 @@
                             @forelse ($structures as $s)
                                 <tr class="hover:bg-slate-50">
                                     <td class="font-medium text-slate-800">{{ $s->program_structure_name }}</td>
-                                    <td class="text-slate-500">{{ $s->created_at->format('d/m/Y') }}</td>
+                                    <td class="text-slate-500">{{ $s->created_at->format('d/m/Y h:i A') }}</td>
                                     <td>
                                         <span class="badge {{ $status == 'approved' ? 'badge-success' : 'badge-warning' }} badge-outline">
                                             {{ ucfirst($s->status) }}
@@ -49,7 +49,7 @@
                                     </td>
                                     <td class="text-center">
                                         @if($status == 'pending')
-                                            <a href="{{ route('review.structure', $s->id) }}" class="btn btn-sm btn-primary">Review</a>
+                                            <a href="{{ route('review.structure', $s->id) }}" class="btn btn-sm btn-primary text-white">Review</a>
                                         @else
                                             <span class="text-slate-400 text-xs italic">View Only</span>
                                         @endif

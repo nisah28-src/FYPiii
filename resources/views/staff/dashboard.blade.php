@@ -36,7 +36,7 @@
                                 <td class="font-medium text-slate-800">{{ $structure->program_structure_name }}</td>
                                 <td class="text-slate-500">{{ $structure->created_at->format('d/m/Y') }}</td>
                                 <td>
-                                    <span class="badge badge-success text-white badge-outline">Approved</span>
+                                    <span class="badge badge-success badge-outline">Approved</span>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('structure.pdf', $structure->id) }}" class="btn btn-sm btn-outline btn-primary">

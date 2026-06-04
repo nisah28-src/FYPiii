@@ -25,16 +25,23 @@
         <div>
             <h1 class="text-2xl font-bold text-slate-800">Update Structure</h1>
             <p class="text-lg text-slate-500 font-medium">Name: <span class="text-blue-600">{{ $structure->program_structure_name }}</span></p>
+            <p class="text-sm text-slate-500">Created At: {{ $structure->created_at->format('d M Y, H:i') }}</p>
+            <p class="text-sm text-slate-500">Status: {{ $structure->status}} </p>
         </div>
 
         <div class="flex gap-2">
+            @if ($structure->status == 'draft')
             <button class="btn btn-outline btn-sm" wire:click="finalize">Finalize & Back</button>
             <button class="btn btn-primary btn-sm" wire:click="submit">Submit</button>
+            @endif
+
         </div>
     </div>
+    @if ($structure->status == 'draft' || $structure->status == 'rejected')
     <button wire:click="addSem" class="btn btn-outline-success w-100">
     + Add New Semester
 </button>
+@endif
 
     @foreach ($group as $sem => $subs)
 
@@ -43,7 +50,10 @@
         <h4> Semester {{ $sem }}</h4>
         <div class="inline-flex gap-2 justify-center">
 </div>
+
+        @if ($structure->status == 'draft' || $structure->status == 'rejected')
         <button class="btn btn-primary" wire:click="OpenModal({{ $sem }})"> Add Subjects</button>
+        @endif
      <div class="overflow-x-auto">
                 <table class="table table-zebra w-full text-sm">
                     <thead class="bg-slate-900/50 border-b border-slate-700"><tr>
@@ -51,7 +61,9 @@
                     <th>Code</th>
                     <th>Credit</th>
                     <th>Prerequisites</th>
+                    @if ($structure->status == 'draft' || $structure->status == 'rejected')
                     <th> Action</th>
+                    @endif
 
                     </tr></thead>
                     <tbody>
@@ -71,9 +83,11 @@
                     None
                     @endif
                     </td>
+                    @if ($structure->status == 'draft' || $structure->status == 'rejected')
                     <td> 
                         <button class="btn btn-error btn-sm" wire:click="removeFromTable({{ $sub->id }}, {{ $sem }})">Remove</button></td></tr>
-                    @empty
+                        @endif
+                    @empty 
                     <tr>
                         <td>No subject Added yet</td>
                     </tr>

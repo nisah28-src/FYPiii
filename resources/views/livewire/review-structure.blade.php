@@ -33,7 +33,7 @@
 
                         <div class="flex flex-col gap-2 pt-2">
                             <button wire:click="approve" class="btn btn-success  w-full">Approve Structure</button>
-                            <button wire:click="reject" class="btn btn-error  w-full">Reject Structure</button>
+                            <button wire:click="reject" class="btn btn-error w-full">Reject Structure</button>
                         </div>
                     </div>
                 </div>

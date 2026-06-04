@@ -60,6 +60,12 @@
                                         @if ($sub->status === 'draft')
                                             <a href="{{ route('program.view',$sub->id) }}" class="btn btn-sm btn-primary">Update</a>
                                             <a href="{{ route('structure.duplicate',$sub->id) }}" class="btn btn-sm btn-ghost">Duplicate</a>
+                                        @elseif ($sub->status === 'pending')
+                                            <a href="{{ route('program.view', $sub->id) }}" class="btn btn-sm btn-primary">View</a>
+                                        @elseif ($sub->status === 'approved')
+                                            <a href="{{ route('program.view', $sub->id) }}" class="btn btn-sm btn-outline btn-success">View</a>
+                                        @elseif ($sub->status === 'rejected')
+                                            <a href="{{ route('program.view', $sub->id) }}" class="btn btn-sm btn-error">Update</a>
                                         @endif
                                         <form action="{{ route('hop.destroy', $sub->id) }}" method="POST">
                                             @csrf @method('DELETE')
