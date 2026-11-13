@@ -26,20 +26,20 @@ Previously, programme structure information was managed through spreadsheet-base
 
 ## System Users
 
-User Role - Responsibilities
-HOP - Manage and submit programme structures
-HOD - Review, comment, approve, or reject submissions
-Staff - Access relevant programme information
-Admin - Manage users and system administration
+- User Role - Responsibilities
+- HOP - Manage and submit programme structures
+- HOD - Review, comment, approve, or reject submissions
+- Staff - Access relevant programme information
+- Admin - Manage users and system administration
 
 ## Technology Stack
 
-Category = Technology 
-Backend = PHP, Laravel 12 
-Frontend = Livewire, Tailwind CSS, DaisyUI
-Database = MySQL
-Development Environment = WAMP , Laravel Herd
-Version Control = Git, GitHub
+- Category = Technology 
+- Backend = PHP, Laravel 12 
+- Frontend = Livewire, Tailwind CSS, DaisyUI
+- Database = MySQL
+- Development Environment = WAMP , Laravel Herd
+- Version Control = Git, GitHub
 
 ## System Preview 
  - A presentation outlining the project background, 
