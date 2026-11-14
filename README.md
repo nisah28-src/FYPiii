@@ -2,6 +2,13 @@
 
 A web-based system developed to streamline the management, review, and approval of academic programme structures at the faculty level.
 
+## System Preview 
+ - A presentation outlining the project background, 
+objectives, system architecture, key functionalities, 
+and development approach.
+
+[https://canva.link/40khzx9mfntdbzz]
+
 ## Project Overview
 
 The **Program Structure Management System** is a final-year project developed to improve the existing programme structure management workflow.
@@ -40,13 +47,6 @@ Previously, programme structure information was managed through spreadsheet-base
 - Database = MySQL
 - Development Environment = WAMP , Laravel Herd
 - Version Control = Git, GitHub
-
-## System Preview 
- - A presentation outlining the project background, 
-objectives, system architecture, key functionalities, 
-and development approach.
-
-[https://canva.link/40khzx9mfntdbzz]
 
 ## Installation & Setup
 
